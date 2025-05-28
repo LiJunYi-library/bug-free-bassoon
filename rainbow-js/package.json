@@ -1,6 +1,6 @@
 {
   "name": "@rainbow_ljy/rainbow-js",
-  "version": "1.0.92",
+  "version": "1.0.90",
   "description": "增加js的一些 api",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -10,7 +10,7 @@
     "url": "git+https://github.com/lijunyi-library/rainbow-js.git"
   },
   "keywords": [],
-  "author": "liJunYi",
+  "author": "",
   "license": "ISC",
   "git-checks": false,
   "scripts": {

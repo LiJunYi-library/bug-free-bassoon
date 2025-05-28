@@ -22,7 +22,7 @@ const testArr = [
   { num: 99, tt: "奇" },
 ];
 
-export * from "./sql.js";
+export * from "./sql";
 
 if (!Array.prototype.at) {
   Array.prototype.at = function (...arg) {
@@ -190,37 +190,6 @@ export function arrayExtractSame(list = [], formatter) {
   }
   return arr.flat();
 }
-
-// 数组排序 根据属性正序
-export function arraySort(list = [], formatter, formatter2) {
-  let fmt = formatter2 || formatter
-  list.sort((a, b) => formatter(a) - fmt(b))
-  return list;
-}
-
-export function arraySortMin(...arg) {
-  return arraySort(...arg)[0]
-}
-
-export function arraySortMax(list = [], ...arg) {
-  return arraySort(list, ...arg)[list.length - 1]
-}
-
-// 数组排序  根据属性倒序
-export function arrayReverseSort(list = [], formatter, formatter2) {
-  let fmt = formatter2 || formatter
-  list.sort((a, b) => fmt(b) - formatter(a))
-  return list;
-}
-
-export function arrayReverseSortMin(...arg) {
-  return arrayReverseSort(...arg)[list.length - 1]
-}
-
-export function arrayReverseSortMax(list = [], ...arg) {
-  return arrayReverseSort(list, ...arg)[0]
-}
-
 /**
  * 数组排序 根据另一个数组的属性
  * @param {*} list
@@ -246,6 +215,7 @@ export function arrayRandom(list) {
     list.push(list[index]);
     list.splice(index, 1);
   }
+  return list;
 }
 // 触发数组方法
 export function arrayInvokeFuns(...args) {
@@ -284,49 +254,21 @@ export function arrayEvents() {
   return { events, push, remove, invoke, invokes };
 }
 
-/* 二分查找 */
-export function arrayBinarySearch(setPointer = (args, index) => (args.right = index - 1), arr = [], formatter, compare) {
-  const fg = {
-    left: 0,
-    right: arr.length - 1,
-    result: -1,
-  }
-  while (fg.left <= fg.right) {
-    const index = Math.floor((fg.left + fg.right) / 2);
-    const item = arr[index]
-    if (formatter(item)) {
-      fg.result = index;
-      setPointer(fg, index, item)
-    } else if (compare(item)) {
-      fg.left = index + 1;
+export function arrayBinaryFind(list, value) {
+  let start = 0;
+  let end = list.length - 1;
+
+  while (start <= end) {
+    let index = Math.floor((start + end) / 2);
+    if (list[index] === value) {
+      return index;
+    } else if (list[index] < value) {
+      start = index + 1;
     } else {
-      fg.right = index - 1;
+      end = index - 1;
     }
   }
-  return fg.result;
-}
-/* 二分查找到符合条件的第一个元素的下标 没有找到返回-1 compare<*/
-export function arrayBinaryFindIndex(arr = [], formatter, compare) {
-  return arrayBinarySearch((args, index) => {
-    args.right = index - 1
-  }, arr, formatter, compare);
-}
-/* 二分查找到符合条件的第一个元素 没有找到返回undefined compare<*/
-export function arrayBinaryFind(arr = [], formatter, compare) {
-  const index = arrayBinaryFindIndex(arr, formatter, compare);
-  return index === -1 ? undefined : arr[index]
-}
-/* 二分查找到符合条件的最后一个元素的下标 没有找到返回-1 compare<*/
-export function arrayBinaryFindLastIndex(arr = [], formatter, compare) {
-  return arrayBinarySearch((args, index) => {
-    args.left = index + 1;
-  }, arr, formatter, compare);
-}
-/* 二分查找到符合条件的最后一个元素 没有找到返回undefined compare<*/
-export function arrayBinaryFindLast(arr = [], formatter, compare) {
-  const index = arrayBinaryFindLastIndex(arr, formatter, compare);
-  return index === -1 ? undefined : arr[index]
-}
 
-
+  return -1;
+}
 
